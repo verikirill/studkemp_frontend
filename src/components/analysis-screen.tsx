@@ -27,8 +27,10 @@ import {
   Calendar,
   Globe,
   MessageSquare,
-  ExternalLink
+  ExternalLink,
+  Map
 } from 'lucide-react'
+import RussiaHeatmap from '@/components/russia-heatmap'
 
 const salesData = [
   { month: 'Янв', sales: 4000, profit: 2400 },
@@ -337,9 +339,9 @@ export function AnalysisScreen({ onBack, onExportPDF, query }: AnalysisScreenPro
             ))}
           </div>
         </motion.div>
-      </div>
+              </div>
 
-      {/* Информация о компаниях */}
+      {/* Тепловая карта России */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -347,18 +349,32 @@ export function AnalysisScreen({ onBack, onExportPDF, query }: AnalysisScreenPro
         className="p-6 rounded-2xl glass-effect bg-card border border-border mb-8"
       >
         <h3 className="text-xl font-semibold mb-6 flex items-center text-foreground">
+          <Map className="w-6 h-6 mr-3 text-primary" />
+          Географическое распределение
+        </h3>
+                      <RussiaHeatmap />
+      </motion.div>
+
+      {/* Информация о компаниях */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="p-6 rounded-2xl glass-effect bg-card border border-border mb-8"
+      >
+        <h3 className="text-xl font-semibold mb-6 flex items-center text-foreground">
           <Building className="w-6 h-6 mr-3 text-primary" />
           Анализируемые компании
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {companyData.map((company, index) => (
-            <motion.div
-              key={company.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.7 + index * 0.1 }}
-              className="p-4 rounded-xl border border-border bg-muted/20 hover:bg-muted/30 transition-colors"
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           {companyData.map((company, index) => (
+             <motion.div
+               key={company.name}
+               initial={{ opacity: 0, scale: 0.9 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ delay: 0.8 + index * 0.1 }}
+               className="p-4 rounded-xl border border-border bg-muted/20 hover:bg-muted/30 transition-colors"
             >
               <div className="flex items-start justify-between mb-3">
                 <h4 className="font-semibold text-foreground text-sm">{company.name}</h4>
@@ -398,7 +414,7 @@ export function AnalysisScreen({ onBack, onExportPDF, query }: AnalysisScreenPro
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9 }}
+        transition={{ delay: 1.1 }}
         className="p-6 rounded-2xl glass-effect bg-card border border-border mb-8"
       >
         <h3 className="text-xl font-semibold mb-6 flex items-center text-foreground">
@@ -406,14 +422,14 @@ export function AnalysisScreen({ onBack, onExportPDF, query }: AnalysisScreenPro
           Актуальные новости рынка
         </h3>
         
-        <div className="space-y-4">
-          {newsData.map((news, index) => (
-            <motion.div
-              key={news.title}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.0 + index * 0.1 }}
-              className="p-4 rounded-xl border border-border bg-muted/10 hover:bg-muted/20 transition-colors"
+                 <div className="space-y-4">
+           {newsData.map((news, index) => (
+             <motion.div
+               key={news.title}
+               initial={{ opacity: 0, x: -20 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ delay: 1.2 + index * 0.1 }}
+               className="p-4 rounded-xl border border-border bg-muted/10 hover:bg-muted/20 transition-colors"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1">
@@ -448,7 +464,7 @@ export function AnalysisScreen({ onBack, onExportPDF, query }: AnalysisScreenPro
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.3 }}
+        transition={{ delay: 1.5 }}
         className="p-6 rounded-2xl glass-effect bg-card border border-border"
       >
         <h3 className="text-xl font-semibold mb-4 flex items-center text-foreground">

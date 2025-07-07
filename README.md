@@ -1,1 +1,0 @@
-# studkemp_frontend

@@ -61,14 +61,12 @@ export default function App() {
   }
 
   const handleBackToChat = () => {
-    setAppState('chat')
-  }
-
-  const handleNewQuery = () => {
     setMessages([])
     setCurrentQuery('')
     setAppState('chat')
   }
+
+
 
   const handleExportPDF = async () => {
     try {
@@ -101,18 +99,6 @@ export default function App() {
         </motion.div>
         
         <div className="flex items-center space-x-4">
-          {appState === 'analysis' && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleNewQuery}
-              className="px-4 py-2 text-sm bg-muted/50 hover:bg-muted rounded-xl transition-colors"
-            >
-              Новый запрос
-            </motion.button>
-          )}
         </div>
       </motion.header>
 
