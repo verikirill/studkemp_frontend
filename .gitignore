@@ -1,0 +1,40 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+/out
+/public/build
+/public/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Mac
+.DS_Store
+
+# editor directories and files
+.idea
+.vscode
+*.iml
+*.swp
+*.bak
+*.orig
+*.log
+
+# Vite-specific
+.vitepress/cache
+.vitepress/dist

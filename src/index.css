@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 285 100% 30%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 285 100% 30%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 285 100% 65%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 285 100% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Скрываем скроллбар для webkit браузеров */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/20;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+}
+
+@layer components {
+  /* Кастомные компоненты */
+  .gradient-bg {
+    background: linear-gradient(135deg, 
+      theme('colors.primary.white') 0%, 
+      theme('colors.primary.purple/10') 50%, 
+      theme('colors.primary.dark/5') 100%);
+  }
+  
+  .dark .gradient-bg {
+    background: linear-gradient(135deg, 
+      theme('colors.primary.dark') 0%, 
+      theme('colors.primary.purple/20') 50%, 
+      theme('colors.primary.dark/80') 100%);
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/80 dark:bg-primary-dark/80 border border-white/20 dark:border-primary-purple/20;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-purple hover:bg-primary-purple/90 text-primary-white 
+           transition-all duration-300 ease-out transform hover:scale-105 
+           focus:ring-2 focus:ring-primary-purple/50 focus:outline-none;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-purple to-primary-dark bg-clip-text;
+  }
+} 
+
+
+.text-primary-purple {
+  color: white;
+}
+
+.text-muted-foreground{
+  color: white;
+}
+
+.bg-primary-purple\/10{
+  background-color: rgb(255 255 255 / 0.1);
+}
