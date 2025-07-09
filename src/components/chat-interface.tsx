@@ -100,12 +100,12 @@ export function ChatInterface({ onSubmit, isLoading, messages }: ChatInterfacePr
               </div>
               
               <h1 className="text-4xl font-bold text-gradient">
-                AI Аналитик
+                Miquella
               </h1>
               
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Загрузите данные или опишите вашу задачу для получения 
-                глубокого анализа с помощью искусственного интеллекта
+                Ваш AI-консультант по финансовому анализу компаний 
+                и инвестиционным решениям
               </p>
             </motion.div>
 
@@ -117,10 +117,9 @@ export function ChatInterface({ onSubmit, isLoading, messages }: ChatInterfacePr
               className="flex flex-wrap justify-center gap-3"
             >
               {[
-                'Анализ продаж по регионам',
-                'Прогноз трендов рынка',
-                'Оптимизация процессов',
-                'Анализ клиентской базы',
+                'Какая компания будет прибыльной в короткие сроки',
+                'Что ты думаешь о компании',
+                'Стоит ли инвестировать в ',
               ].map((example, index) => (
                 <motion.button
                   key={example}
@@ -153,7 +152,7 @@ export function ChatInterface({ onSubmit, isLoading, messages }: ChatInterfacePr
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isLoading}
-              placeholder="Опишите вашу задачу для анализа..."
+              placeholder="Задайте вопрос о компании или инвестициях..."
               className={cn(
                 "w-full px-6 py-4 pr-14 rounded-2xl glass-effect",
                 "bg-card text-card-foreground placeholder:text-muted-foreground",

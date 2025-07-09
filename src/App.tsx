@@ -6,6 +6,7 @@ import { AnimatedBackground } from '@/components/animated-background'
 import { ChatInterface } from '@/components/chat-interface'
 import { LoadingScreen } from '@/components/loading-screen'
 import { AnalysisScreen } from '@/components/analysis-screen'
+import { RotateScreen } from '@/components/rotate-screen'
 
 import { generateId, sleep } from '@/lib/utils'
 import { exportAnalysisToPDF } from '@/lib/pdf-export'
@@ -79,6 +80,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Экран поворота устройства */}
+      <RotateScreen />
+      
       {/* Анимированный фон */}
       <AnimatedBackground />
       
@@ -95,7 +99,7 @@ export default function App() {
           <div className="w-8 h-8 bg-primary-purple rounded-lg flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-gradient">StudKemp AI</span>
+          <span className="text-xl font-bold text-gradient">Miquella</span>
         </motion.div>
         
         <div className="flex items-center space-x-4">

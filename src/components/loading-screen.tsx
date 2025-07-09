@@ -16,14 +16,14 @@ export function LoadingScreen({ isVisible }: LoadingScreenProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center"
     >
       <div className="text-center space-y-8">
         {/* Основная анимация загрузки */}
         <div className="relative">
           {/* Внешнее кольцо */}
           <motion.div
-            className="w-24 h-24 border-4 border-primary-purple/20 rounded-full"
+            className="w-24 h-24 border-4 border-white/20 rounded-full"
             animate={{ rotate: 360 }}
             transition={{
               duration: 3,
@@ -34,7 +34,7 @@ export function LoadingScreen({ isVisible }: LoadingScreenProps) {
           
           {/* Внутреннее кольцо */}
           <motion.div
-            className="absolute inset-2 w-16 h-16 border-4 border-t-primary-purple border-r-transparent border-b-transparent border-l-transparent rounded-full"
+            className="absolute inset-2 w-16 h-16 border-4 border-t-white border-r-transparent border-b-transparent border-l-transparent rounded-full"
             animate={{ rotate: -360 }}
             transition={{
               duration: 1.5,
@@ -55,7 +55,7 @@ export function LoadingScreen({ isVisible }: LoadingScreenProps) {
               ease: "easeInOut",
             }}
           >
-            <Brain className="w-8 h-8 text-primary-purple" />
+            <Brain className="w-8 h-8 text-white" />
           </motion.div>
         </div>
 
@@ -73,26 +73,26 @@ export function LoadingScreen({ isVisible }: LoadingScreenProps) {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-          >
-            <Zap className="w-6 h-6 text-primary-purple/70" />
-          </motion.div>
-          
-          <motion.div
-            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            animate={{
-              y: [-10, 10, -10],
-              x: [40, -40, 40],
-              opacity: [0.7, 1, 0.7],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1,
-            }}
-          >
-            <BarChart3 className="w-5 h-5 text-primary-purple/60" />
-          </motion.div>
+                      >
+              <Zap className="w-6 h-6 text-white/70" />
+            </motion.div>
+            
+            <motion.div
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              animate={{
+                y: [-10, 10, -10],
+                x: [40, -40, 40],
+                opacity: [0.7, 1, 0.7],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1,
+              }}
+            >
+              <BarChart3 className="w-5 h-5 text-white/60" />
+            </motion.div>
         </div>
 
         {/* Текст загрузки */}
@@ -103,15 +103,15 @@ export function LoadingScreen({ isVisible }: LoadingScreenProps) {
           exit={{ opacity: 0, y: -20 }}
           className="space-y-2"
         >
-          <h2 className="text-xl font-semibold text-foreground">
+          <h2 className="text-xl font-semibold text-white">
             {currentText}
           </h2>
           
           {/* Прогресс бар */}
           <div className="w-64 mx-auto">
-            <div className="h-1 bg-muted rounded-full overflow-hidden">
+            <div className="h-1 bg-white/20 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-primary-purple to-primary-dark"
+                className="h-full bg-gradient-to-r from-white to-white/80"
                 animate={{
                   x: ['-100%', '100%'],
                 }}
@@ -130,7 +130,7 @@ export function LoadingScreen({ isVisible }: LoadingScreenProps) {
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}
-              className="w-2 h-2 bg-primary-purple rounded-full"
+              className="w-2 h-2 bg-white rounded-full"
               animate={{
                 scale: [1, 1.5, 1],
                 opacity: [0.5, 1, 0.5],

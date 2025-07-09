@@ -10,6 +10,7 @@ import {
   PieChart, 
   Pie, 
   Cell, 
+  LineChart, 
   Line, 
   Area, 
   AreaChart 
