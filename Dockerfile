@@ -1,7 +1,6 @@
-# Многостадийная сборка для React + Vite приложения
+# Классический запуск React + Vite приложения через Node.js
 
-# Стадия сборки
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
@@ -9,8 +8,8 @@ WORKDIR /app
 # Копируем файлы зависимостей
 COPY package*.json ./
 
-# Устанавливаем зависимости
-RUN npm ci --silent
+# Устанавливаем зависимости включая serve для статики
+RUN npm ci --silent && npm install -g serve
 
 # Копируем исходный код
 COPY . .
@@ -18,17 +17,8 @@ COPY . .
 # Собираем приложение
 RUN npm run build
 
-# Стадия продакшена
-FROM nginx:alpine AS production
+# Открываем порт 3000
+EXPOSE 3000
 
-# Копируем собранное приложение в nginx
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Копируем кастомную конфигурацию nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Открываем порт 80
-EXPOSE 80
-
-# Запускаем nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Запускаем приложение через serve
+CMD ["serve", "-s", "dist", "-l", "3000"]
