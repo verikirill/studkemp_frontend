@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Frontend сервис
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: studkemp-frontend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    networks:
+      - studkemp-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+
+  # Сервис для разработки (альтернативный запуск)
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    container_name: studkemp-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    networks:
+      - studkemp-network
+    profiles:
+      - dev
+
+  # Nginx для балансировки (опционально)
+  nginx:
+    image: nginx:alpine
+    container_name: studkemp-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+    restart: unless-stopped
+    networks:
+      - studkemp-network
+    profiles:
+      - production
+
+# Определение сетей
+networks:
+  studkemp-network:
+    driver: bridge
+    name: studkemp-network
+
+# Определение томов (для будущего использования)
+volumes:
+  frontend_node_modules:
+    name: studkemp_frontend_node_modules 
