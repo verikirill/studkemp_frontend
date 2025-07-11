@@ -14,9 +14,10 @@ interface ChatInterfaceProps {
   onSubmit: (message: string) => void
   isLoading: boolean
   messages: Message[]
+  error?: string
 }
 
-export function ChatInterface({ onSubmit, isLoading, messages }: ChatInterfaceProps) {
+export function ChatInterface({ onSubmit, isLoading, messages, error }: ChatInterfaceProps) {
   const [input, setInput] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -136,6 +137,19 @@ export function ChatInterface({ onSubmit, isLoading, messages }: ChatInterfacePr
               ))}
             </motion.div>
           </>
+        )}
+
+        {/* Отображение ошибки */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-2xl mx-auto mb-4"
+          >
+            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500">
+              <p className="text-sm">{error}</p>
+            </div>
+          </motion.div>
         )}
 
         {/* Поле ввода */}

@@ -7,7 +7,11 @@ interface RegionData {
   color: string;
 }
 
-const RussiaHeatmap: React.FC = () => {
+interface RussiaHeatmapProps {
+  highlightedRegion?: string | null;
+}
+
+const RussiaHeatmap: React.FC<RussiaHeatmapProps> = ({ highlightedRegion }) => {
   const [svgContent, setSvgContent] = useState<string>('');
   const [hoveredRegion, setHoveredRegion] = useState<RegionData | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -136,7 +140,7 @@ const RussiaHeatmap: React.FC = () => {
     };
   }, [hoveredRegion]);
 
-  // Обработка SVG после загрузки
+  // Обработка SVG после загрузки и при изменении выделенного региона
   useEffect(() => {
     if (!svgContent) return;
 
@@ -148,17 +152,37 @@ const RussiaHeatmap: React.FC = () => {
       const regionId = path.getAttribute('id');
       const regionData = regionsData[regionId || ''];
       
+      // Проверяем, является ли этот регион выделенным
+      const isHighlighted = highlightedRegion && regionId === highlightedRegion;
+      
       if (regionData) {
         // Устанавливаем цвет региона
-        path.setAttribute('fill', regionData.color);
-        path.setAttribute('stroke', '#374151');
-        path.setAttribute('stroke-width', '0.5');
-        path.setAttribute('style', 'cursor: pointer; transition: all 0.2s ease;');
+        if (isHighlighted) {
+          // Подсвечиваем выделенный регион ярким цветом
+          path.setAttribute('fill', '#ef4444'); // красный цвет для выделения
+          path.setAttribute('stroke', '#dc2626');
+          path.setAttribute('stroke-width', '2');
+          path.setAttribute('style', 'cursor: pointer; transition: all 0.2s ease; filter: brightness(1.2);');
+        } else {
+          // Обычный цвет для остальных регионов
+          path.setAttribute('fill', regionData.color);
+          path.setAttribute('stroke', '#374151');
+          path.setAttribute('stroke-width', '0.5');
+          path.setAttribute('style', 'cursor: pointer; transition: all 0.2s ease;');
+        }
       } else {
         // Для регионов без данных
-        path.setAttribute('fill', '#4b5563');
-        path.setAttribute('stroke', '#374151');
-        path.setAttribute('stroke-width', '0.5');
+        if (isHighlighted) {
+          // Подсвечиваем даже регионы без данных, если они выделены
+          path.setAttribute('fill', '#ef4444');
+          path.setAttribute('stroke', '#dc2626');
+          path.setAttribute('stroke-width', '2');
+          path.setAttribute('style', 'cursor: pointer; transition: all 0.2s ease; filter: brightness(1.2);');
+        } else {
+          path.setAttribute('fill', '#4b5563');
+          path.setAttribute('stroke', '#374151');
+          path.setAttribute('stroke-width', '0.5');
+        }
       }
     });
 
@@ -208,20 +232,33 @@ const RussiaHeatmap: React.FC = () => {
               const mouseEvent = e as MouseEvent;
               setHoveredRegion(regionData);
               setMousePosition({ x: mouseEvent.clientX, y: mouseEvent.clientY });
-              path.setAttribute('fill', '#fbbf24');
-              path.setAttribute('stroke-width', '1');
+              
+              // Проверяем, является ли регион выделенным
+              const isHighlighted = highlightedRegion && regionId === highlightedRegion;
+              if (!isHighlighted) {
+                path.setAttribute('fill', '#fbbf24');
+                path.setAttribute('stroke-width', '1');
+              }
             });
             
             path.addEventListener('mouseleave', () => {
               setHoveredRegion(null);
-              path.setAttribute('fill', regionData.color);
-              path.setAttribute('stroke-width', '0.5');
+              
+              // Восстанавливаем цвет в зависимости от того, выделен ли регион
+              const isHighlighted = highlightedRegion && regionId === highlightedRegion;
+              if (isHighlighted) {
+                path.setAttribute('fill', '#ef4444');
+                path.setAttribute('stroke-width', '2');
+              } else {
+                path.setAttribute('fill', regionData.color);
+                path.setAttribute('stroke-width', '0.5');
+              }
             });
           }
         });
       }
     }
-  }, [svgContent]);
+  }, [svgContent, highlightedRegion]);
 
   return (
     <div className="bg-gray-900 rounded-lg p-6">

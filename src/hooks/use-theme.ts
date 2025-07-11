@@ -34,7 +34,7 @@ export function useTheme() {
     return
   }
 
-  const setSpecificTheme = (_newTheme: Theme) => {
+  const setSpecificTheme = (newTheme: Theme) => {
     // Принудительно устанавливаем темную тему независимо от параметра
     setTheme('dark')
     applyTheme('dark')

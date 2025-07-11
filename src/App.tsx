@@ -11,6 +11,7 @@ import { RotateScreen } from '@/components/rotate-screen'
 import { generateId, sleep } from '@/lib/utils'
 import { exportAnalysisToPDF } from '@/lib/pdf-export'
 import { useTheme } from '@/hooks/use-theme'
+import { searchCompanies, analyzeCompany, getNewsByOkved, type AnalysisData } from '@/lib/api'
 
 type AppState = 'chat' | 'loading' | 'analysis'
 
@@ -25,6 +26,8 @@ export default function App() {
   const [appState, setAppState] = useState<AppState>('chat')
   const [messages, setMessages] = useState<Message[]>([])
   const [currentQuery, setCurrentQuery] = useState('')
+  const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null)
+  const [error, setError] = useState<string>('')
   
   // Принудительно устанавливаем темную тему
   useTheme()
@@ -39,31 +42,88 @@ export default function App() {
     
     setMessages(prev => [...prev, userMessage])
     setCurrentQuery(message)
+    setError('')
     
     // Переходим в состояние загрузки
     setAppState('loading')
     
-    // Имитируем обработку запроса (3-5 секунд)
-    const loadingTime = 3000 + Math.random() * 2000
-    await sleep(loadingTime)
-    
-    // Добавляем ответ ассистента
-    const assistantMessage: Message = {
-      id: generateId(),
-      content: 'Анализ данных завершен. Результаты готовы для просмотра.',
-      role: 'assistant',
-      timestamp: new Date(),
+    try {
+      // Поиск компаний
+      const searchResults = await searchCompanies(message)
+      
+      if (searchResults.data && searchResults.data.length > 0) {
+        // Берем первую компанию из результатов
+        const firstCompany = searchResults.data[0]
+        
+        // Анализируем компанию
+        const analysis = await analyzeCompany(firstCompany.tin)
+        
+        // Получаем дополнительные новости (если есть код активности)
+        let enhancedAnalysis = analysis
+        if (firstCompany.activity_code_main) {
+          try {
+            const additionalNews = await getNewsByOkved(firstCompany.activity_code_main)
+            enhancedAnalysis = {
+              ...analysis,
+              industry_news: {
+                ...analysis.industry_news,
+                news: [...analysis.industry_news.news, ...additionalNews.news],
+                count: analysis.industry_news.count + additionalNews.count,
+                total_available: analysis.industry_news.total_available + additionalNews.total_available
+              }
+            }
+          } catch (newsError) {
+            console.warn('Не удалось получить дополнительные новости:', newsError)
+          }
+        }
+        
+        setAnalysisData(enhancedAnalysis)
+        
+        // Добавляем ответ ассистента
+        const assistantMessage: Message = {
+          id: generateId(),
+          content: `Найдена компания "${enhancedAnalysis.company_info.name}" в регионе ${enhancedAnalysis.company_info.region}. Анализ данных завершен. Результаты готовы для просмотра.`,
+          role: 'assistant',
+          timestamp: new Date(),
+        }
+        
+        setMessages(prev => [...prev, assistantMessage])
+        
+        // Переходим к экрану анализа
+        setAppState('analysis')
+      } else {
+        // Если компании не найдены
+        const assistantMessage: Message = {
+          id: generateId(),
+          content: 'К сожалению, по вашему запросу компании не найдены. Попробуйте изменить запрос или использовать более конкретные термины.',
+          role: 'assistant',
+          timestamp: new Date(),
+        }
+        
+        setMessages(prev => [...prev, assistantMessage])
+        setAppState('chat')
+      }
+    } catch (error) {
+      console.error('Ошибка обработки запроса:', error)
+      setError(error instanceof Error ? error.message : 'Произошла неизвестная ошибка')
+      
+      const assistantMessage: Message = {
+        id: generateId(),
+        content: 'Произошла ошибка при обработке запроса. Проверьте подключение к серверу и попробуйте еще раз.',
+        role: 'assistant',
+        timestamp: new Date(),
+      }
+      
+      setMessages(prev => [...prev, assistantMessage])
+      setAppState('chat')
     }
-    
-    setMessages(prev => [...prev, assistantMessage])
-    
-    // Переходим к экрану анализа
-    setAppState('analysis')
   }
 
   const handleBackToChat = () => {
     setMessages([])
     setCurrentQuery('')
+    setAnalysisData(null)
+    setError('')
     setAppState('chat')
   }
 
@@ -122,6 +182,7 @@ export default function App() {
                 onSubmit={handleChatSubmit}
                 isLoading={false}
                 messages={messages}
+                error={error}
               />
             </motion.div>
           )}
@@ -144,6 +205,7 @@ export default function App() {
                 onBack={handleBackToChat}
                 onExportPDF={handleExportPDF}
                 query={currentQuery}
+                analysisData={analysisData}
               />
             </motion.div>
           )}
