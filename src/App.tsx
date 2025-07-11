@@ -8,7 +8,7 @@ import { LoadingScreen } from '@/components/loading-screen'
 import { AnalysisScreen } from '@/components/analysis-screen'
 import { RotateScreen } from '@/components/rotate-screen'
 
-import { generateId, sleep } from '@/lib/utils'
+import { generateId } from '@/lib/utils'
 import { exportAnalysisToPDF } from '@/lib/pdf-export'
 import { useTheme } from '@/hooks/use-theme'
 import { searchCompanies, analyzeCompany, getNewsByOkved, type AnalysisData } from '@/lib/api'
